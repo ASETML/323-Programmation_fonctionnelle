@@ -18,33 +18,22 @@
             sr.Close();
 
             //Comptage des stands de pêches
-            int nbStandsPeches = 0;
-            foreach (Stand stand in stands)
-            {
-                if (stand.GetProduit() == "Pêches")
-                {
-                    nbStandsPeches++;
-                }
-            }
+            int nbStandsPeches = stands.Where(s => s.GetProduit() == "Pêches").ToList().Count();
 
             Console.WriteLine($"Il y a {nbStandsPeches} vendeurs de pêches");
 
             //Trouver le producteur qui a le plus de pastèque
-            string NomProducteur = "";
-            int StandNumero = 0;
-            int NombrePasteques = 0;
+            Stand BestPastequesStand = stands.OrderBy(s => s.GetQte()).Where(s => s.GetProduit() == "Pastèques").Last();
 
-            foreach (Stand stand in stands)
-            {
-                if (stand.GetProduit() == "Pastèques" && stand.GetQte() > NombrePasteques)
-                {
-                    NomProducteur = stand.GetProducteur();
-                    StandNumero = stand.GetEmplacement();
-                    NombrePasteques = stand.GetQte();
-                }
-            }
+            Console.WriteLine($"C'est {BestPastequesStand.GetProducteur()} qui a le plus de pastèques (stand {BestPastequesStand.GetEmplacement()}, {BestPastequesStand.GetQte()} pièces)");
+            
+            //Trouver les producteurs qui vendent plus de 10kg de melons
+            List<Stand> MelonProducteurs = stands.Where(s => s.GetQte() > 10 && s.GetProduit() == "Melons").OrderBy(s => s.GetPrixUnitaire()).ToList();
+            MelonProducteurs.ForEach(m => Console.WriteLine(m));
 
-            Console.WriteLine($"C'est {NomProducteur} qui a le plus de pastèques (stand {StandNumero}, {NombrePasteques} pièces)");
+            //Trouver la quantité de tomate en vente
+            int TomateQte = stands.Where(s => s.GetProduit() == "Tomates").Sum(s => s.GetQte());
+            Console.WriteLine($"Il y a {TomateQte}kg de tomate en vente");
         }
     }
 }

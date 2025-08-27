@@ -45,6 +45,11 @@ namespace ex_marche
             return this.Qte;
         }
 
+        public double GetPrixUnitaire()
+        {
+            return this.PrixUnitaire;
+        }
+
         public override string ToString()
         {
             return $"Stand numéro {Emplacement} qui appartient à {Producteur} vend {Qte}{Unite} de {Produit} avec un prix unitaire de {PrixUnitaire}";
