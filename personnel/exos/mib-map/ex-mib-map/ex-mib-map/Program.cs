@@ -132,11 +132,13 @@ namespace ex_mib_map
                 return p;
             };
 
+            List<string> json = new List<string>();
+
             Action<(string, string, string)> ExportJson = p =>
             {
                 var x = new { p.Item1, p.Item2, p.Item3 };
-                Console.WriteLine(x);
-                Console.WriteLine(p);
+                //Console.WriteLine(x);
+                //Console.WriteLine(p);
                 Console.WriteLine(JsonSerializer.Serialize(x));
                 //new Item(p.Item1, p.Item2, p.Item3)
             };
