@@ -117,7 +117,7 @@ namespace ex_mib_map
                 .ToList().ForEach(p => File.AppendAllText(fileName, $"{p.Item1},{p.Item2},{p.Item3}\n"));
 
             //Dashboard
-
+            
             Func<int, string> CategorizeProductStock = q =>
             {
                 if (q < 10) return "Stock faible";
