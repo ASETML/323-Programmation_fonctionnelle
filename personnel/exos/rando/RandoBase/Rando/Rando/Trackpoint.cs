@@ -8,20 +8,20 @@ namespace Rando
 {
     class Trackpoint
     {
-        private double _latitude;
-        private double _longitude;
-        private double _elevation;
+        public double latitude { get; set; }
+        public double longitude { get; set; }
+        public double elevation { get; set; }
 
         public Trackpoint(double latitude, double longitude, double elevation)
         {
-            _latitude = latitude;
-            _longitude = longitude;
-            _elevation = elevation;
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.elevation = elevation;
         }
 
         public override string ToString()
         {
-            return $"lat: {this._latitude} lon: {this._longitude} ele: {this._elevation}";
+            return $"lat: {this.latitude} lon: {this.longitude} ele: {this.elevation}";
         }
     }
 }
