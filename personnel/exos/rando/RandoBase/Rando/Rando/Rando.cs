@@ -74,7 +74,13 @@ namespace Rando
                 Color.FromArgb(255, 255,  16,  6),
                 Color.FromArgb(255, 255,   0,  0)  // Rouge vif
             };
+        }
 
+        private Point gpsToScreen(Trackpoint trackpoint, double latmin, double latmax, double lonmin, double lonmax)
+        {
+            double height = latmax - latmin;
+            double width = lonmax - lonmin;
+            return new Point((int)((trackpoint.longitude - lonmin) * width * 100000), (int)((trackpoint.latitude - latmin) * height * 100000));
         }
     }
 }
