@@ -24,17 +24,30 @@ namespace Rando
                 trackpoints.Add(new Trackpoint(double.Parse(node.Attributes["lat"].Value), double.Parse(node.Attributes["lon"].Value), double.Parse(node["ele"].InnerText)));
             }
 
-            trackpoints.ForEach(trackpoint => Trace.WriteLine(trackpoint));
-
             Pen myPen = new Pen(Color.Red);
             myPen.Width = 2;
 
             List<PointF> points = trackpoints.Select(t => new PointF((float)(t.longitude), (float)(t.latitude))).ToList();
-            points.ForEach(point => Trace.WriteLine(point));
+            //points.ForEach(point => Trace.WriteLine(point));
             this.CreateGraphics().DrawLines(myPen, points.ToArray());
 
-            List<(double, Color)> coloredPoints = trackpoints.Select()
+            //Calcul de la longueur du tracé avec aggregate
 
+            double length = 0;
+            Func<Trackpoint, Trackpoint, Trackpoint> calculateLength = (a, b) =>
+            {
+                length += Math.Sqrt(Math.Pow(a.latitude - b.latitude, 2) + Math.Pow(a.longitude - b.longitude, 2));
+
+                //Version 3d
+                //length += Math.Sqrt(Math.Pow(Math.Sqrt(Math.Pow(a.latitude - b.latitude, 2) + Math.Pow(a.longitude - b.longitude, 2)), 2) + Math.Pow(a.elevation - b.elevation, 2));
+                Trace.WriteLine(length);
+                return b;
+            };
+
+            trackpoints.Aggregate(trackpoints.First(), (a, b) => calculateLength(a, b));
+
+            Trace.WriteLine(length);
+            
             Color[] gradient = new Color[]
             {
                 Color.FromArgb(255, 144, 238, 144), // Vert clair
