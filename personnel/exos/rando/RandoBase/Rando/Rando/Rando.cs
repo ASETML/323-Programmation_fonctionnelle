@@ -32,22 +32,32 @@ namespace Rando
             this.CreateGraphics().DrawLines(myPen, points.ToArray());
 
             //Calcul de la longueur du tracé avec aggregate
-
             double length = 0;
             Func<Trackpoint, Trackpoint, Trackpoint> calculateLength = (a, b) =>
             {
-                length += Math.Sqrt(Math.Pow(a.latitude - b.latitude, 2) + Math.Pow(a.longitude - b.longitude, 2));
+                //Pythagore
+                //length += Math.Sqrt(Math.Pow(a.latitude - b.latitude, 2) + Math.Pow(a.longitude - b.longitude, 2));
 
                 //Version 3d
-                //length += Math.Sqrt(Math.Pow(Math.Sqrt(Math.Pow(a.latitude - b.latitude, 2) + Math.Pow(a.longitude - b.longitude, 2)), 2) + Math.Pow(a.elevation - b.elevation, 2));
-                Trace.WriteLine(length);
+                length += Math.Sqrt(Math.Pow(Math.Sqrt(Math.Pow(a.latitude - b.latitude, 2) + Math.Pow(a.longitude - b.longitude, 2)), 2) + Math.Pow(a.elevation - b.elevation, 2));
+                //Trace.WriteLine(length);
                 return b;
             };
 
             trackpoints.Aggregate(trackpoints.First(), (a, b) => calculateLength(a, b));
 
             Trace.WriteLine(length);
-            
+
+            length = 0;
+            //Calcul de la longueur du tracé avec zip et skip
+            trackpoints
+                .Select(t => new Trackpoint(t.latitude, t.longitude, t.elevation))
+                .Zip(trackpoints.Skip(1).Select(t => new Trackpoint(t.latitude, t.longitude, t.elevation)))
+                .ToList()
+                .ForEach(i => calculateLength(i.ToTuple().Item1, i.ToTuple().Item2));
+
+            Trace.WriteLine(length);
+
             Color[] gradient = new Color[]
             {
                 Color.FromArgb(255, 144, 238, 144), // Vert clair
