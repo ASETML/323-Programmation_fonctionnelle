@@ -86,10 +86,10 @@ if (ignoreCase)
 List<LinesComparison> comparisons = linesA
     .Zip(linesB)
     .Select(l => new LinesComparison(l.First.Split(":").First(), l.First.Split(":")[1], l.Second.Split(":")[1]))
-    .ToList<LinesComparison>();
+    .ToList();
 
 // TODO: 07 Sélectionner les lignes qui ont des différences
-var diffLines = new List<LinesComparison>();
+List<LinesComparison> diffLines = comparisons.Where(c => c.ContentA != c.ContentB).ToList();
 
 // TODO: 08 Afficher le nombre de lignes identiques et différentes entre les 2 fichiers
 
