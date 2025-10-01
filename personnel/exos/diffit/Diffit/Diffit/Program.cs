@@ -142,12 +142,19 @@ Action<LinesComparison> printDiff = comparison =>
 diffLines.ForEach(l => printDiff(l));
 
 /// Chiffrement
-// TODO: 11 Créer une fonction qui chiffre le 1er fichier en décalant les caratères d’un nombre
+// TODO: 12 Créer une fonction qui chiffre le 1er fichier en décalant les caratères d’un nombre
 //saisi par l’utilisateur (clé)
 // Le contenu chiffré est enregistré sur le disque dans le fichier "cipheredA.txt"
 // Le pendant de ReadAllLines est WriteAllLines
 Console.Write("\n\nSPECIAL FEATURE: Clé de chiffrement [1-25]: ");
 byte key = Convert.ToByte(Console.ReadLine());
+
+Func<string, string> encrypt = line =>
+{
+    return new string(line.Select(c => (char)(c + key)).ToArray());
+};
+
+File.WriteAllLines("cipheredA.txt", linesA.Select(l => encrypt(l)).ToList());
 
 public class LinesComparison
 {
