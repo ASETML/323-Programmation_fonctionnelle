@@ -85,7 +85,7 @@ if (ignoreCase)
 // TODO: 06 Créer et remplir une liste de LinesComparison à partir de linesA et linesB
 List<LinesComparison> comparisons = linesA
     .Zip(linesB)
-    .Select(l => new LinesComparison(l.First.Split(":").First(), l.First.Split(":")[1], l.Second.Split(":")[1]))
+    .Select(l => new LinesComparison(l.First.Split(":").First(), l.First.Split(":")[1].Remove(0, 1), l.Second.Split(":")[1].Remove(0, 1)))
     .ToList();
 
 // TODO: 07 Sélectionner les lignes qui ont des différences
@@ -101,7 +101,13 @@ Console.WriteLine("Lignes différentes: " + diffLines.Count);
 // Ainsi "12345".Zip("ABCDE", (a, b) => $"{a}{b}").ToList().ForEach(Console.Write);//1A2B3C4D5E
 // ATTENTION: zip ne prend que le nombre d’éléments minimum commun entre 2 listes...
 // Ceci implique une correction: en plus du nombre de différences, il faut ajouter la différence du nombre de caractères entre les deux...
-Func<LinesComparison, int> countVariations = _ => -1;
+Func<LinesComparison, int> countVariations = comparison =>
+{
+    string paddedA = comparison.ContentA.Length < comparison.ContentB.Length ? comparison.ContentA.PadRight(comparison.ContentB.Length): comparison.ContentA;
+    string paddedB = comparison.ContentB.Length < comparison.ContentA.Length ? comparison.ContentB.PadRight(comparison.ContentA.Length) : comparison.ContentB;
+
+    return paddedA.Zip(paddedB).ToList().Where(l => l.First != l.Second).Count();
+};
 
 // TODO: 10 Afficher pour chaque ligne différente, le nombre de variations
 
