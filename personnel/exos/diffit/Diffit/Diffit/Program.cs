@@ -85,7 +85,7 @@ if (ignoreCase)
 // TODO: 06 Créer et remplir une liste de LinesComparison à partir de linesA et linesB
 List<LinesComparison> comparisons = linesA
     .Zip(linesB)
-    .Select(l => new LinesComparison(l.First.Split(":").First(), l.First.Split(":")[1].Remove(0, 1), l.Second.Split(":")[1].Remove(0, 1)))
+    .Select(l => new LinesComparison(l.First.Split(":").First(), l.First, l.Second))
     .ToList();
 
 // TODO: 07 Sélectionner les lignes qui ont des différences
@@ -103,10 +103,9 @@ Console.WriteLine("Lignes différentes: " + diffLines.Count);
 // Ceci implique une correction: en plus du nombre de différences, il faut ajouter la différence du nombre de caractères entre les deux...
 Func<LinesComparison, int> countVariations = comparison =>
 {
-    string paddedA = comparison.ContentA.Length < comparison.ContentB.Length ? comparison.ContentA.PadRight(comparison.ContentB.Length): comparison.ContentA;
-    string paddedB = comparison.ContentB.Length < comparison.ContentA.Length ? comparison.ContentB.PadRight(comparison.ContentA.Length) : comparison.ContentB;
-
-    return paddedA.Zip(paddedB).ToList().Where(l => l.First != l.Second).Count();
+    comparison.ContentA = comparison.ContentA.Length < comparison.ContentB.Length ? comparison.ContentA.PadRight(comparison.ContentB.Length) : comparison.ContentA;
+    comparison.ContentB = comparison.ContentB.Length < comparison.ContentA.Length ? comparison.ContentB.PadRight(comparison.ContentA.Length) : comparison.ContentB;
+    return comparison.ContentA.Zip(comparison.ContentB).ToList().Where(l => l.First != l.Second).Count();
 };
 
 // TODO: 10 Afficher pour chaque ligne différente, le nombre de variations
@@ -119,6 +118,28 @@ diffLines.ForEach(l => Console.WriteLine($"Ligne {l.Number} : {countVariations(l
 // Les lettres similaires sont en vert
 // Les lettres différentes sont en rouge (options entre[a/b])
 // On n’indique rien sur les caractères en plus ou en moins
+//Affichage des charactères
+Action<(char, char)> printColor = line =>
+{
+    if (line.Item1.ToString() != " " && line.Item2.ToString() != " ")
+    {
+        Console.ForegroundColor = line.Item1 == line.Item2 ? ConsoleColor.Green : ConsoleColor.Red;
+        Console.Write(line.Item1 == line.Item2 ? line.Item1.ToString() : "[" + line.Item1 + "/" + line.Item2 + "]");
+        return;
+    }
+    Console.Write(" ");
+};
+
+//Affichage des lignes
+Action<LinesComparison> printDiff = comparison =>
+{
+    Console.WriteLine("\n\n>Ligne" + comparison.Number + ":");
+    comparison.ContentA.Zip(comparison.ContentB).ToList().ForEach(l => printColor(l));
+    
+    Console.ForegroundColor = ConsoleColor.White;
+};
+
+diffLines.ForEach(l => printDiff(l));
 
 /// Chiffrement
 // TODO: 11 Créer une fonction qui chiffre le 1er fichier en décalant les caratères d’un nombre
