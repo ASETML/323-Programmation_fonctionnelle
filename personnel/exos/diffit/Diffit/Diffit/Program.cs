@@ -110,6 +110,7 @@ Func<LinesComparison, int> countVariations = comparison =>
 };
 
 // TODO: 10 Afficher pour chaque ligne différente, le nombre de variations
+diffLines.ForEach(l => Console.WriteLine($"Ligne {l.Number} : {countVariations(l)} différences"));
 
 /// Diff coloré
 // TODO: 11 Colorier les différences
