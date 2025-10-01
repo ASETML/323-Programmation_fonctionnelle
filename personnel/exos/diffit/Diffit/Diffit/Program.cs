@@ -32,7 +32,7 @@ string[] linesA = File.ReadAllLines(pathA);
 string[] linesB = File.ReadAllLines(pathB);
 
 // TODO: 03 Vérifier que les fichier ont le même nombre de lignes
-if (true)
+if (linesA.Length != linesB.Length)
 {
     Console.WriteLine("Erreur: les fichiers n'ont pas le même nombre de ligne");
     Environment.Exit(-2);
@@ -67,7 +67,7 @@ bool ignoreCase = Console.ReadLine() == "o";
 List<LinesComparison> comparisons = new();
 
 // TODO: 07 Sélectionner les lignes qui ont des différences
-var diffLines = new Liste<LinesComparison>();
+var diffLines = new List<LinesComparison>();
 
 // TODO: 08 Afficher le nombre de lignes identiques et différentes entre les 2 fichiers
 
