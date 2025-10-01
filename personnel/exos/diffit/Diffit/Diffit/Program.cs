@@ -83,7 +83,10 @@ if (ignoreCase)
 
 
 // TODO: 06 Créer et remplir une liste de LinesComparison à partir de linesA et linesB
-List<LinesComparison> comparisons = new();
+List<LinesComparison> comparisons = linesA
+    .Zip(linesB)
+    .Select(l => new LinesComparison(l.First.Split(":").First(), l.First.Split(":")[1], l.Second.Split(":")[1]))
+    .ToList<LinesComparison>();
 
 // TODO: 07 Sélectionner les lignes qui ont des différences
 var diffLines = new List<LinesComparison>();
@@ -121,6 +124,13 @@ public class LinesComparison
     public int Number { get; set; }
     public string ContentA { get; set; } = "";
     public string ContentB { get; set; } = "";
+
+    public LinesComparison(string line, string contentA, string contentB)
+    {
+        this.Number = int.Parse(line.Remove(0, 5));
+        this.ContentA = contentA;
+        this.ContentB = contentB;
+    }
 
     /// <summary>
     /// Ajuste le numéro de ligne...
