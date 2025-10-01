@@ -4,6 +4,8 @@
 //Descr. : Entraînement au test 323
 //         Cet outil permet de comparer 2 fichiers (avec le même nombre de lignes) ligne par ligne et indiquer les différences... Il permet aussi de faire du chiffrement
 
+using System.Linq;
+
 ///MENU
 Console.WriteLine("+--------------------------------+");
 Console.WriteLine("|DIFFIT : A very limited DIFFTOOL|");
@@ -61,6 +63,23 @@ Console.Write("-Ignorer la casse [o/n]: ");
 bool ignoreCase = Console.ReadLine() == "o";
 
 // TODO:  05 Appliquer le nettoyage selon la demande utilisateur
+if (ignoreSpaces)
+{
+    linesA = linesA.Select(l => cleanSpaces(l)).ToArray();
+    linesB = linesB.Select(l => cleanSpaces(l)).ToArray();
+}
+
+if (ignoreTabs)
+{
+    linesA = linesA.Select(l => cleanTabs(l)).ToArray();
+    linesB = linesB.Select(l => cleanTabs(l)).ToArray();
+}
+
+if (ignoreCase)
+{
+    linesA = linesA.Select(l => enforceCase(l)).ToArray();
+    linesB = linesB.Select(l => enforceCase(l)).ToArray();
+}
 
 
 // TODO: 06 Créer et remplir une liste de LinesComparison à partir de linesA et linesB
